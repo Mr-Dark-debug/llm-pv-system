@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><h1>Export</h1><span class="badge text-bg-light">CSV / JSON</span></div>
+<div class="panel export-links">
+  <a class="btn btn-outline-primary" href="/api/admin/export/participants.csv">Participants CSV</a>
+  <a class="btn btn-outline-primary" href="/api/admin/export/benchmark.json">Benchmark JSON</a>
+</div>
+{% endblock %}

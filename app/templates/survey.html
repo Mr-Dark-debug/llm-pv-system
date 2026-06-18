@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}{{ study|upper }} Survey - LLMs as Linguistic Input{% endblock %}
+{% block content %}
+<section class="survey-shell">
+  <div class="survey-art">
+    <div class="orbital-card">
+      <span class="mini-kicker">L2 English Study</span>
+      <h1>{{ "Study 1 Experiment" if study == "study1" else "Study 2 Survey" }}</h1>
+      <p>Move through a short guided flow about LLM exposure and phrasal-verb choices.</p>
+      <div class="survey-meta">
+        <span>Anonymous</span>
+        <span>6 steps</span>
+        <span>SQLite saved</span>
+      </div>
+    </div>
+  </div>
+
+  <form
+    id="surveyForm"
+    class="survey-phone"
+    data-study="{{ study }}"
+    data-link-token="{{ survey_link.token if survey_link else '' }}"
+    data-link-label="{{ survey_link.label if survey_link else '' }}"
+  >
+    <div class="phone-top">
+      <div class="brand-dot">L</div>
+      <div>
+        <strong>LEI Study</strong>
+        <small>{{ survey_link.label if survey_link else "Direct research link" }}</small>
+      </div>
+    </div>
+    <div class="progress-track"><span id="surveyProgress"></span></div>
+
+    <section class="survey-step active" data-step="0">
+      <span class="mini-kicker">Consent</span>
+      <h2>Before we begin</h2>
+      <p>Your responses are anonymous and used for research on LLM exposure and phrasal-verb use.</p>
+      <label class="choice-card selected">
+        <input type="checkbox" name="consent" checked>
+        <span class="choice-icon">✓</span>
+        <span><strong>I consent to participate</strong><small>I am 18+ and understand this anonymous study.</small></span>
+      </label>
+    </section>
+
+    <section class="survey-step" data-step="1">
+      <span class="mini-kicker">Profile</span>
+      <h2>Tell us about your English background</h2>
+      <div class="field-grid">
+        <label>Age<input class="form-control" name="age" type="number" min="18" max="35" value="24"></label>
+        <label>CEFR<select class="form-select" name="cefr_self_rating"><option>A2</option><option>B1</option><option>B2</option><option selected>C1</option><option>C2</option></select></label>
+        <label>L1 language<input class="form-control" name="l1_language" value="Hindi"></label>
+        <label>Country<input class="form-control" name="country" value="IN"></label>
+        <label>Education<select class="form-select" name="education"><option>high_school</option><option>bachelors</option><option selected>masters</option><option>doctorate</option></select></label>
+        <label>Years English<input class="form-control" name="years_english" type="number" step="0.5" value="10"></label>
+      </div>
+      <label class="soft-field">Gender<input class="form-control" name="gender" value="self-described"></label>
+    </section>
+
+    <section class="survey-step" data-step="2">
+      <span class="mini-kicker">LLM Exposure</span>
+      <h2>Which tools shape your English input?</h2>
+      <div class="range-stack">
+        <label>ChatGPT frequency <strong data-range-value="chatgpt_frequency">5</strong><input class="form-range live-range" name="chatgpt_frequency" type="range" min="1" max="5" value="5"></label>
+        <label>Claude frequency <strong data-range-value="claude_frequency">2</strong><input class="form-range live-range" name="claude_frequency" type="range" min="1" max="5" value="2"></label>
+        <label>Gemini frequency <strong data-range-value="gemini_frequency">1</strong><input class="form-range live-range" name="gemini_frequency" type="range" min="1" max="5" value="1"></label>
+      </div>
+      <div class="field-grid">
+        <label>Daily minutes<input class="form-control" name="daily_minutes_llm" type="number" min="0" max="120" value="45"></label>
+        <label>Duration score<input class="form-control" name="duration_of_use_months" type="number" min="1" max="5" value="4"></label>
+      </div>
+    </section>
+
+    <section class="survey-step" data-step="3">
+      <span class="mini-kicker">Models</span>
+      <h2>Select models you use or recognize</h2>
+      <div class="model-pills">
+        {% for model in models[:18] %}
+        <label class="model-pill">
+          <input type="checkbox" name="model_{{ model.provider }}" value="{{ model.model_id }}" {% if loop.index in [1, 2, 3] %}checked{% endif %}>
+          <span>{{ model.display_name }}</span>
+          <small>{{ model.provider }}</small>
+        </label>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="survey-step" data-step="4">
+      <span class="mini-kicker">Tasks</span>
+      <h2>Choose what sounds natural</h2>
+      <div class="task-card">
+        <strong>Forced-choice items</strong>
+        <small>Select when the phrasal-verb option sounds better.</small>
+        <div class="task-grid compact">
+          {% for i in range(1, 11) %}
+          <label class="chip-check"><input type="checkbox" name="forced_D{{ i }}"><span>D{{ i }}</span></label>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="task-card">
+        <strong>Translation items</strong>
+        <small>Select when your translation used a phrasal verb.</small>
+        <div class="task-grid compact">
+          {% for i in range(1, 6) %}
+          <label class="chip-check"><input type="checkbox" name="translation_E{{ i }}"><span>E{{ i }}</span></label>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="field-grid ratings">
+        {% for i in range(1, 6) %}
+        <label>F{{ i }} rating<input class="form-control" type="number" name="accept_F{{ i }}" min="1" max="5" value="3"></label>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="survey-step" data-step="5">
+      <span class="mini-kicker">Reflection</span>
+      <h2>One last thought</h2>
+      <label>How do LLMs influence your English?<textarea class="form-control" name="qualitative_g1">I use LLMs for examples.</textarea></label>
+      <label>How do phrasal verbs feel to you?<textarea class="form-control" name="qualitative_g2">Phrasal verbs often feel informal.</textarea></label>
+      <div id="surveyResult" class="survey-result" hidden></div>
+    </section>
+
+    <div class="survey-nav">
+      <button class="btn btn-ghost" id="surveyBack" type="button">Back</button>
+      <div class="step-dots" id="surveyDots"></div>
+      <button class="btn btn-primary" id="surveyNext" type="button">Continue</button>
+    </div>
+  </form>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/js/survey.js"></script>{% endblock %}

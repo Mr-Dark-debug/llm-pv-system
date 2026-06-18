@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Benchmark - LLMs as Linguistic Input{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Benchmark</h1>
+  <span class="badge text-bg-secondary">{{ models|length }} active models</span>
+</div>
+<div class="panel">
+  <table class="table table-hover align-middle">
+    <thead><tr><th>Provider</th><th>Model</th><th>PVR</th><th>Literal</th><th>Semi</th><th>Figurative</th><th></th></tr></thead>
+    <tbody>
+    {% for model in models %}
+    <tr>
+      <td>{{ model.provider }}</td>
+      <td><a href="/benchmark/{{ model.id }}">{{ model.display_name }}</a></td>
+      <td>{{ "%.2f"|format(model.pvr_overall) }}</td>
+      <td>{{ model.n_literal_pv }}</td>
+      <td>{{ model.n_semi_pv }}</td>
+      <td>{{ model.n_figurative_pv }}</td>
+      <td class="text-end"><button class="btn btn-sm btn-primary run-model" data-model-id="{{ model.id }}">Run</button></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div id="benchmarkStatus" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/benchmark.js"></script>{% endblock %}

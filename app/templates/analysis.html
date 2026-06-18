@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Analysis - LLMs as Linguistic Input{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Analysis</h1>
+  <span class="badge text-bg-light">{{ summary.lei_pva_correlation.status }}</span>
+</div>
+<div class="row g-4">
+  <div class="col-xl-6"><div class="panel"><h2>LEI x PVA</h2><canvas id="scatterChart" height="160"></canvas></div></div>
+  <div class="col-xl-6"><div class="panel"><h2>Model PVR</h2><canvas id="analysisPvrChart" height="160"></canvas></div></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+window.analysisData = {{ summary | tojson }};
+</script>
+<script src="/static/js/analysis.js"></script>
+{% endblock %}

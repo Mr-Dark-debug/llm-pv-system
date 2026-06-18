@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><h1>Participants</h1><span class="badge text-bg-light">{{ participants|length }}</span></div>
+<div class="panel">
+  <table class="table table-sm align-middle">
+    <thead><tr><th>Code</th><th>Study</th><th>Condition</th><th>Age</th><th>L1</th><th>CEFR</th><th>Submitted</th></tr></thead>
+    <tbody>{% for participant in participants %}<tr><td>{{ participant.participant_code }}</td><td>{{ participant.study }}</td><td>{{ participant.condition or "" }}</td><td>{{ participant.age }}</td><td>{{ participant.l1_language }}</td><td>{{ participant.cefr_self_rating }}</td><td>{{ participant.submission_timestamp }}</td></tr>{% endfor %}</tbody>
+  </table>
+</div>
+{% endblock %}

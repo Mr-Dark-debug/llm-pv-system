@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - LLMs as Linguistic Input{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>LLMs as Linguistic Input</h1>
+    <p class="text-muted mb-0">Benchmarking phrasal-verb production and L2 learner avoidance.</p>
+  </div>
+  <span class="badge text-bg-success">SQLite persistent</span>
+</div>
+<section class="metric-grid">
+  <div class="metric"><span>Models</span><strong>{{ summary.counts.models }}</strong></div>
+  <div class="metric"><span>Participants</span><strong>{{ summary.counts.participants }}</strong></div>
+  <div class="metric"><span>Survey responses</span><strong>{{ summary.counts.survey_responses }}</strong></div>
+  <div class="metric"><span>LEI/PVA correlation</span><strong>{{ summary.lei_pva_correlation.r or "n/a" }}</strong></div>
+</section>
+<section class="row g-4 mt-1">
+  <div class="col-xl-7">
+    <div class="panel">
+      <h2>Model PVR</h2>
+      <canvas id="pvrChart" height="120"></canvas>
+    </div>
+  </div>
+  <div class="col-xl-5">
+    <div class="panel">
+      <h2>Quick Status</h2>
+      <table class="table table-sm align-middle mb-0">
+        <tbody>
+        <tr><th>Benchmark scope</th><td>90 prompts x active models x 3 runs</td></tr>
+        <tr><th>LLM mode</th><td>Mock-safe until provider keys are configured</td></tr>
+        <tr><th>Analysis state</th><td>{{ summary.lei_pva_correlation.status }}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+window.dashboardData = {{ summary.model_pvr | tojson }};
+</script>
+<script src="/static/js/dashboard.js"></script>
+{% endblock %}

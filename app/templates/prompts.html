@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><h1>Prompts</h1><span class="badge text-bg-light">{{ prompts|length }}</span></div>
+<div class="panel">
+  <table class="table table-sm align-middle">
+    <thead><tr><th>ID</th><th>Type</th><th>Target PV</th><th>Register</th><th>Text</th></tr></thead>
+    <tbody>{% for prompt in prompts %}<tr><td>{{ prompt.prompt_id }}</td><td>{{ prompt.prompt_type }}</td><td>{{ prompt.target_pv or "" }}</td><td>{{ prompt.expected_register }}</td><td>{{ prompt.prompt_text }}</td></tr>{% endfor %}</tbody>
+  </table>
+</div>
+{% endblock %}

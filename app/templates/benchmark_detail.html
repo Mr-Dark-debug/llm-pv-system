@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Benchmark Detail - LLMs as Linguistic Input{% endblock %}
+{% block content %}
+{% if model %}
+<div class="page-head">
+  <h1>{{ model.display_name }}</h1>
+  <span class="badge text-bg-light">{{ model.provider }}</span>
+</div>
+<section class="metric-grid">
+  <div class="metric"><span>PVR</span><strong>{{ "%.2f"|format(model.pvr_overall) }}</strong></div>
+  <div class="metric"><span>Literal</span><strong>{{ model.n_literal_pv }}</strong></div>
+  <div class="metric"><span>Semi-transparent</span><strong>{{ model.n_semi_pv }}</strong></div>
+  <div class="metric"><span>Figurative</span><strong>{{ model.n_figurative_pv }}</strong></div>
+</section>
+<div class="panel mt-4">
+  <h2>Recent Outputs</h2>
+  <table class="table table-sm align-middle">
+    <thead><tr><th>Prompt</th><th>Run</th><th>Status</th><th>Words</th><th>PVs</th><th>PVR</th></tr></thead>
+    <tbody>
+    {% for response in model.responses[-30:] %}
+    <tr><td>{{ response.prompt.prompt_id }}</td><td>{{ response.run_id }}</td><td>{{ response.status }}</td><td>{{ response.word_count }}</td><td>{{ response.pv_count }}</td><td>{{ response.pvr_per_1k }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-warning">Model not found.</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Survey Links - LLMs as Linguistic Input{% endblock %}
+{% block content %}
+<div class="page-head elevated">
+  <div>
+    <span class="mini-kicker">Distribution</span>
+    <h1>Protected Survey Links</h1>
+    <p class="text-muted mb-0">Create unguessable public links for Study 1 conditions or Study 2 survey cohorts.</p>
+  </div>
+</div>
+
+<section class="split-grid">
+  <form id="surveyLinkForm" class="panel luxe-panel">
+    <h2>Create link</h2>
+    <label class="soft-field">Label<input class="form-control" name="label" value="Study 2 pilot cohort"></label>
+    <div class="field-grid">
+      <label>Study<select class="form-select" name="study"><option value="study2">Study 2</option><option value="study1">Study 1</option></select></label>
+      <label>Condition<select class="form-select" name="condition"><option value="">None</option><option value="control">Control</option><option value="low_pv">Low PV</option><option value="pv_exposed">PV exposed</option></select></label>
+    </div>
+    <button class="btn btn-primary w-100" type="submit">Create Share Link</button>
+    <div id="newLinkBox" class="link-result" hidden></div>
+  </form>
+
+  <div class="panel luxe-panel">
+    <h2>Existing links</h2>
+    <div class="link-list" id="surveyLinkList">
+      {% for link in links %}
+      <div class="link-row">
+        <div><strong>{{ link.label }}</strong><small>{{ link.study }} {{ link.condition or "" }} · {{ link.response_count }} responses</small></div>
+        <code>{{ request.url_for("survey_link_page", token=link.token) }}</code>
+      </div>
+      {% else %}
+      <p class="text-muted">No links yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/js/survey_links.js"></script>{% endblock %}
