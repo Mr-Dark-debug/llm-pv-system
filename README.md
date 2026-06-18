@@ -72,7 +72,7 @@ Then extend `app/services/pv_detector.py` to prefer dependency matches and keep 
 ## Tests
 
 ```powershell
-cd D:\projects\LEI-evaluation\llm_pv_system
+cd llm_pv_system
 .\.venv\Scripts\python -m pytest -q
 ```
 
